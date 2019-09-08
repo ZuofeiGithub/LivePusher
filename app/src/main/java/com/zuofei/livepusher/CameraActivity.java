@@ -1,5 +1,6 @@
 package com.zuofei.livepusher;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -14,6 +15,12 @@ public class CameraActivity extends AppCompatActivity {
         setContentView(R.layout.activity_camera);
         cameraView = findViewById(R.id.cameraview);
 
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        cameraView.previewAngle(this);
     }
 
     @Override

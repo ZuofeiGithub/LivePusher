@@ -1,15 +1,23 @@
 package com.zuofei.livepusher.camera;
 
+import android.content.Context;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 
+import com.zuofei.livepusher.utils.DisplayUtil;
+
 import java.io.IOException;
+import java.util.List;
 
 public class CameraOpt {
     private SurfaceTexture surfaceTexture;
     private Camera camera;
-    public CameraOpt() {
+    private int screenWidth;
+    private int screenHeight;
+    public CameraOpt(Context context) {
+        this.screenWidth = DisplayUtil.getScreenWidth(context);
+        this.screenHeight = DisplayUtil.getScreenHeight(context);
     }
     public void initCamera(SurfaceTexture surfaceTexture,int cameraId)
     {
@@ -23,11 +31,12 @@ public class CameraOpt {
             camera.setPreviewTexture(surfaceTexture);
             Camera.Parameters parameters = camera.getParameters();
             parameters.setFlashMode("off");
+
+            Camera.Size size = getFitSize(parameters.getSupportedPictureSizes());
             parameters.setPreviewFormat(ImageFormat.NV21);
-            parameters.setPictureSize(parameters.getSupportedPictureSizes().get(0).width,
-                    parameters.getSupportedPictureSizes().get(0).height);
-            parameters.setPreviewSize(parameters.getSupportedPreviewSizes().get(0).width,
-                    parameters.getSupportedPreviewSizes().get(0).height);
+            parameters.setPictureSize(size.width,size.height);
+            size = getFitSize(parameters.getSupportedPreviewSizes());
+            parameters.setPreviewSize(size.width, size.height);
             camera.setParameters(parameters);
             camera.startPreview();
         } catch (IOException e) {
@@ -47,5 +56,19 @@ public class CameraOpt {
             stopPreview();
         }
         setCameraParams(cameraId);
+    }
+
+    private Camera.Size getFitSize(List<Camera.Size> sizes){
+        if(screenWidth  < screenHeight){
+            int t = screenHeight;
+            screenHeight = screenWidth;
+            screenWidth = t;
+        }
+        for(Camera.Size size:sizes){
+            if(1.0f*size.width/size.height == 1.0f*screenWidth / screenHeight ){
+                return size;
+            }
+        }
+        return sizes.get(0);
     }
 }
