@@ -14,6 +14,8 @@ public class CameraView extends WLEGLSurfaceView {
     private CameraOpt cameraOpt;
     private int cameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
 
+    private int textureId = -1;
+
     public CameraView(Context context) {
         super(context, null);
     }
@@ -30,8 +32,9 @@ public class CameraView extends WLEGLSurfaceView {
         previewAngle(context); //预览角度
         cameraRender.setOnSurfaceCreateListener(new CameraRender.OnSurfaceCreateListener() {
             @Override
-            public void onSurfaceCreate(SurfaceTexture surfaceTexture) {
+            public void onSurfaceCreate(SurfaceTexture surfaceTexture,int tid) {
                 cameraOpt.initCamera(surfaceTexture, cameraId);
+                textureId = tid;
             }
         });
     }
@@ -78,5 +81,9 @@ public class CameraView extends WLEGLSurfaceView {
         if (cameraOpt != null) {
             cameraOpt.stopPreview();
         }
+    }
+
+    public int getTextureId(){
+      return  textureId;
     }
 }

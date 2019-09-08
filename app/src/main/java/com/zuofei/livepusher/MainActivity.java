@@ -39,8 +39,14 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.CAMERA,
-                                Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                                Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         }
+    }
+
+    public void record(View view) {
+        Intent intent = new Intent(this,VideoActivity.class);
+        requestAllPower();
+        startActivity(intent);
     }
 }

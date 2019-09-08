@@ -59,6 +59,10 @@ public class CameraRender implements WLEGLSurfaceView.WlGLRender,SurfaceTexture.
         this.onSurfaceCreateListener = onSurfaceCreateListener;
     }
 
+    public int getFboTextureid() {
+        return fboTextureid;
+    }
+
     public CameraRender(Context context) {
         this.context = context;
         screenWidht = DisplayUtil.getScreenWidth(context);
@@ -154,7 +158,7 @@ public class CameraRender implements WLEGLSurfaceView.WlGLRender,SurfaceTexture.
         surfaceTexture.setOnFrameAvailableListener(this);
 
         if(onSurfaceCreateListener != null){
-            onSurfaceCreateListener.onSurfaceCreate(surfaceTexture);
+            onSurfaceCreateListener.onSurfaceCreate(surfaceTexture,fboTextureid);
         }
         GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES,0);
     }
@@ -207,6 +211,6 @@ public class CameraRender implements WLEGLSurfaceView.WlGLRender,SurfaceTexture.
     }
 
     public interface OnSurfaceCreateListener{
-        void onSurfaceCreate(SurfaceTexture surfaceTexture);
+        void onSurfaceCreate(SurfaceTexture surfaceTexture,int textureId);
     }
 }
