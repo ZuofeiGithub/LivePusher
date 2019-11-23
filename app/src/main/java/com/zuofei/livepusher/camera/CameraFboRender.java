@@ -11,6 +11,10 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+
+/**
+ * 摄像头预览打水印
+ */
 public class CameraFboRender {
 
     private Context context;
@@ -49,7 +53,7 @@ public class CameraFboRender {
     public CameraFboRender(Context context) {
         this.context = context;
 
-        bitmap = WlShaderUtil.createTextImage("视频直播和推流:ywdasd",50,"#ff0000","#ffffffff",0);
+        bitmap = WlShaderUtil.createTextImage("视频直播和推流:ywdasd",50,"#ff0000","#00ffff00",0);
 
         float r = 1.0f * bitmap.getWidth() / bitmap.getHeight();
         float w = r * 0.1f;
@@ -88,6 +92,10 @@ public class CameraFboRender {
 
     public void onCreate()
     {
+        //开启argb透明
+        GLES20.glEnable(GLES20.GL_BLEND);
+        GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA,GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
         String vertexSource = WlShaderUtil.getRawResource(context, R.raw.vertex_shader_screen); //顶点
         String fragmentSource = WlShaderUtil.getRawResource(context, R.raw.fragment_shader_screen);
 
